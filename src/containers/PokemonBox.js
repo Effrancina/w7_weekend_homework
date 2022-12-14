@@ -10,17 +10,19 @@ const PokemonBox = () => {
     const [pokemons, setPokemons] = useState([])
     const [pokemon, setPokemon] = useState(null)
     const [pImages, setpImages] = useState([])
+    const [pImage, setpImage] = useState(null)
     const [pData, setpData] = useState([])
     // const [randomPokemon, setRandomPokemon] = useState(null);
 
+
     useEffect(() => {
         getPokemon();
-        // fetchImages();
+
       }, [])
     
     
     const getPokemon = function(){
-        fetch('https://pokeapi.co/api/v2/pokemon/?limit=20')
+        fetch('https://pokeapi.co/api/v2/pokemon/?limit=152')
         .then(res => res.json())
         .then(pokemons => {
             setPokemons(pokemons.results);
@@ -42,16 +44,17 @@ const PokemonBox = () => {
    
 
     const handleRandomPokemon = () => {
-        setPokemon(pokemons[Math.floor(Math.random() * pokemons.length)])
-        console.log(pokemon.element.sprites.other["dream_world"]["front_default"])
+        const randNumber = Math.floor(Math.random() * pokemons.length)
+        setPokemon(pokemons[randNumber])
+        setpImage(pImages[randNumber])
     }
-    // console.log(pokemons);
+    
 
     return(
         <>
         <Title />
         <button onClick={handleRandomPokemon}>Get me a pokemon</button>
-        {pokemon ? <PokemonGenerator pokemon={pokemon}/> : null }
+        {pokemon ? <PokemonGenerator pokemon={pokemon} pImage={pImage}/> : null }
         {pokemons ? <PokemonList 
         pokemons={pokemons} pImages={pImages}
         /> : null }

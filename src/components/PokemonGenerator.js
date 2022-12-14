@@ -1,9 +1,13 @@
-const PokemonGenerator = ({pokemon}) => {
+const PokemonGenerator = ({pokemon, pImage}) => {
 
     
 
     return(
+        <>
         <p>{pokemon.name}</p>
+        <img src={pImage} />
+        </>
+
     )
 
 
