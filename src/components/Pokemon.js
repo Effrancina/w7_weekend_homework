@@ -1,6 +1,6 @@
 import React from "react"
 
-const Pokemon = ({pName, image}) => {
+const Pokemon = ({pName}) => {
     const altTag = `${pName}`;
     
 
@@ -8,10 +8,6 @@ const Pokemon = ({pName, image}) => {
     return(
         
         <div ClassName='pokemon'>
-            <img
-            src={image}
-            alt={altTag}
-            />
 
             <div ClassName='details'> 
                 

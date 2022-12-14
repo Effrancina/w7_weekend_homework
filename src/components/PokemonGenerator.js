@@ -1,12 +1,12 @@
-// const PokemonGenerator = ({handleRandomPokemon}) => {
+const PokemonGenerator = ({pokemon}) => {
 
     
 
-//     return(
-//         <button onClick={handleRandomPokemon}>What Pokemon are you?</button>
-//     )
+    return(
+        <p>{pokemon.name}</p>
+    )
 
 
-// }
+}
 
-// export default PokemonGenerator;
+export default PokemonGenerator;

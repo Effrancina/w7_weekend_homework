@@ -1,79 +1,60 @@
 import React, {useState, useEffect} from "react";
 import Title from "../components/Title";
 import PokemonList from "../components/PokemonList";
+import PokemonGenerator from "../components/PokemonGenerator";
+
 
 
 
 const PokemonBox = () => {
     const [pokemons, setPokemons] = useState([])
-    const [pokemon, setPokemon] = useState([])
+    const [pokemon, setPokemon] = useState(null)
     const [pImages, setpImages] = useState([])
-    const [randomPokemon, setRandomPokemon] = useState(null);
+    const [pData, setpData] = useState([])
+    // const [randomPokemon, setRandomPokemon] = useState(null);
 
     useEffect(() => {
         getPokemon();
-        fetchImages();
+        // fetchImages();
       }, [])
-
+    
+    
     const getPokemon = function(){
         fetch('https://pokeapi.co/api/v2/pokemon/?limit=20')
         .then(res => res.json())
-        // .then(data => {console.log(data); return data})
-        .then(pokemons => setPokemons(pokemons.results))
+        .then(pokemons => {
+            setPokemons(pokemons.results);
+            const pokes = pokemons.results;
+            const pokemonPromise = pokes.map((element) => {
+                return fetch(element.url).then(res => res.json())
+            })
+            Promise.all(pokemonPromise)
+            .then(data => {
+                console.log(data)
+                setpData(data);
+                setpImages(data.map((element) => {
+                   return element.sprites.other["dream_world"]["front_default"]
+                }))
+            })
+        })
         .catch(error => console.error(error))
-        fetch('https://pokeapi.co/api/v2/pokemon/?limit=20')
-        .then(res => res.json())
-        // .then(data => {console.log(data); return data})
-        .then(pokemons => setpImages(pokemons.results.url))
-        .catch(error => console.error(error))
-        // fetchImages()
-        // let imageLibrary = []
-        // let urlArray = pokemons.map((row) => {
-        //     return(
-        //         row.url
-
-        //     )
-        // })
-        // setpImages(urlArray)
-        // console.log(urlArray)
     }
-    
-  
-    const fetchImages = function () {
-        // let imageLibrary = []
-        // let urlArray = pokemons.map((row) => {
-        //     return(
-        //         row.url
-
-        //     )
-        // })
-        // console.log(urlArray)
-        // for (let url of Array(pokemons['url'])) {
-        //     console.log(url)
-        //     fetch(url)
-        //     .then(res => res.json())
-        //     .then(poke => poke['sprites']['front_default'])
-        //     .then(pokeImg => imageLibrary.push(pokeImg))
-        // }
-        // setpImages(imageLibrary)
-        // console.log(pImages)
-
-    } 
    
 
     const handleRandomPokemon = () => {
         setPokemon(pokemons[Math.floor(Math.random() * pokemons.length)])
-        // console.log(generateRandomPokemon)
+        console.log(pokemon.element.sprites.other["dream_world"]["front_default"])
     }
-    console.log(pokemons);
+    // console.log(pokemons);
 
     return(
         <>
         <Title />
-        {pokemons ? <PokemonList 
-        pokemons={pokemons}
-        /> : null }
         <button onClick={handleRandomPokemon}>Get me a pokemon</button>
+        {pokemon ? <PokemonGenerator pokemon={pokemon}/> : null }
+        {pokemons ? <PokemonList 
+        pokemons={pokemons} pImages={pImages}
+        /> : null }
         </>
     )
 }
